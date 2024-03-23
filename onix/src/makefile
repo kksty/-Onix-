@@ -4,6 +4,20 @@ SRC:=.
 #指定入口地址，内核开始执行的位置
 ENTRYPOINT:=0X10000
 
+CFLAGS:= -m32 #32位程序
+CFLAGS+= -fno-builtin #不需要gcc的内置函数 如memcpy
+CFLAGS+= -nostdinc #不需要标准头文件
+CFLAGS+= -fno-pic #不需要位置无关的代码
+CFLAGS+= -fno-pie #不需要位置无关的可执行程序
+CFLAGS+= -nostdlib #不需要标准库
+CFLAGS+= -fno-stack-protector #不需要栈保护
+CFLAGS:= $(strip ${CFLAGS})
+
+
+
+DEBUG:= -g
+INCLUDE:= -I$(SRC)/include
+
 #模式规则，符合规则的都以这种模式来编译
 $(BUILD)/boot/%.bin: $(SRC)/boot/%.asm
 	$(shell mkdir -p $(dir $@))
@@ -11,9 +25,14 @@ $(BUILD)/boot/%.bin: $(SRC)/boot/%.asm
 
 $(BUILD)/kernel/%.o: $(SRC)/kernel/%.asm
 	$(shell mkdir -p $(dir $@))
-	nasm -f elf32 $< -o $@
+	nasm -f elf32 $(DEBUG) $< -o $@
 
-$(BUILD)/kernel.bin: $(BUILD)/kernel/start.o
+$(BUILD)/kernel/%.o: $(SRC)/kernel/%.c
+	$(shell mkdir -p $(dir $@))
+	gcc $(CFLAGS) $(DEBUG) $(INCLUDE) -c $< -o $@
+
+$(BUILD)/kernel.bin: $(BUILD)/kernel/start.o \
+	$(BUILD)/kernel/main.o
 	$(shell mkdir -p $(dir $@))
 	ld -m elf_i386 -static $^ -o $@ -Ttext $(ENTRYPOINT)
 

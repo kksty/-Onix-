@@ -41,7 +41,8 @@ prepare_protected_mode:
 
     ; xchg bx,bx
 
-    cli;关闭中断
+    ;关闭中断
+    cli
 
     ;打开A20总线
     in al,0x92
@@ -84,7 +85,7 @@ error:
 
 [bits 32]
 protect_mode:
-    xchg bx,bx ;中断
+    ;xchg bx,bx ;中断
     mov ax,data_selector ;将代码段之外的数据全部写为数据段
     mov ds, ax
     mov es, ax
@@ -174,6 +175,7 @@ read_disk:
         ret   
 
 
+; 选择子
 code_selector equ (1 << 3 ) 
 data_selector equ (2 << 3 ) 
 
@@ -189,7 +191,7 @@ gdt_base:
 gdt_code:
     dw  memory_limit & 0xffff ;段界限的 0 ～ 15 位
     dw memory_base & 0xffff; 基地址 0 ~ 15 位
-    db  (memory_base >> 16) & 0xff  
+    db  (memory_base >> 16) & 0xff   ;基地址 16 ～ 23 位
     db 0b_1_00_1_1_0_1_0   ; 代码_非依从_可读_没有被访问过 
     db 0b1_1_0_0_0000 | (memory_limit >> 16) & 0xf ;4k_32位_不是64位_送给操作系统了
     db (memory_base >> 24) & 0xff ;基地址24-31位

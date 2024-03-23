@@ -21,7 +21,7 @@ mov bl, 4 ;读取的扇区数量
 call read_disk
 
 cmp word[0x1000], 0x55aa
-jnz error
+jnz error   
 
 jmp 0:0x1002
 ;阻塞
@@ -34,7 +34,7 @@ read_disk:
     out dx, al
 
     inc dx ;移动到0x1f3
-    mov al, cl; 起始扇区的前八位
+    mov al, cl ; 起始扇区的前八位
     out dx, al
 
     inc dx ;移动到0x1f4
@@ -109,7 +109,7 @@ print:
     ret
 
 booting:
-    db "Booting Onix...", 10, 13, 0
+    db "Booting Onix...", 10, 13, 0 
 
 error:
     mov si, .msg
