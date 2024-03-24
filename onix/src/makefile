@@ -61,4 +61,9 @@ clean:
 
 .PHNOY: bochs
 bochs: $(BUILD)/master.img
-	bochs -q
+	bochs -q -f ../bochs/bochsrc
+
+.PHNOY: bochsg
+bochsg: $(BUILD)/master.img
+	bochs-gdb-a20 -q -f ../bochs/bochsrc.gdb
+
