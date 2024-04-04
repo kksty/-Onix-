@@ -1,12 +1,19 @@
 #include <onix/onix.h>
-int magic = ONIX_MAGIC;
-char message[] = "hello, onix!qaq!";
+#include <onix/types.h>
+#include <onix/io.h>
+#include <onix/string.h>
+#include <onix/console.h>
+
+char message[] = "hello onix!!!\n";
 char buf[1024];
+
 void kernel_init()
 {
-    char *video = (char *)0xb8000; // 文本显示器内存位置
-    for (int i = 0; i < sizeof(message); i++)
+    console_init();
+    while (true)
     {
-        video[i * 2] = message[i];
+        console_writer(message, sizeof(message) - 1);
     }
+
+    return;
 }

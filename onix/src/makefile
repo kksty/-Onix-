@@ -23,16 +23,21 @@ $(BUILD)/boot/%.bin: $(SRC)/boot/%.asm
 	$(shell mkdir -p $(dir $@))
 	nasm -f bin $< -o $@
 
-$(BUILD)/kernel/%.o: $(SRC)/kernel/%.asm
+$(BUILD)/%.o: $(SRC)/%.asm
 	$(shell mkdir -p $(dir $@))
 	nasm -f elf32 $(DEBUG) $< -o $@
 
-$(BUILD)/kernel/%.o: $(SRC)/kernel/%.c
+$(BUILD)/%.o: $(SRC)/%.c
 	$(shell mkdir -p $(dir $@))
 	gcc $(CFLAGS) $(DEBUG) $(INCLUDE) -c $< -o $@
 
-$(BUILD)/kernel.bin: $(BUILD)/kernel/start.o \
-	$(BUILD)/kernel/main.o
+$(BUILD)/kernel.bin: \
+	$(BUILD)/kernel/start.o \
+	$(BUILD)/kernel/main.o \
+	$(BUILD)/kernel/io.o \
+	$(BUILD)/kernel/console.o \
+	$(BUILD)/lib/string.o 
+
 	$(shell mkdir -p $(dir $@))
 	ld -m elf_i386 -static $^ -o $@ -Ttext $(ENTRYPOINT)
 
@@ -67,3 +72,23 @@ bochs: $(BUILD)/master.img
 bochsg: $(BUILD)/master.img
 	bochs-gdb-a20 -q -f ../bochs/bochsrc.gdb
 
+.PHNOY:qemu
+qemu: $(BUILD)/master.img
+	qemu-system-i386 \
+	-m 32M \
+	-boot c \
+	-hda $<
+
+.PHNOY:qemug
+qemug: $(BUILD)/master.img
+	qemu-system-i386 \
+	-s -S \
+	-m 32M \
+	-boot c \
+	-hda $<
+
+$(BUILD)/master.vmdk: $(BUILD)/master.img
+	qemu-img convert -O vmdk $< $@
+
+.PHNOY: vmdk
+vmdk: $(BUILD)/master.vmdk
