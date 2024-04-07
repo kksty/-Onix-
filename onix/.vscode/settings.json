@@ -8,6 +8,11 @@
         "types.h": "c",
         "string.h": "c",
         "cstring": "c",
-        "console.h": "c"
+        "console.h": "c",
+        "onix.h": "c",
+        "stdarg.h": "c",
+        "printk.h": "c",
+        "*.inc": "c",
+        "cassert": "c"
     }
 }
