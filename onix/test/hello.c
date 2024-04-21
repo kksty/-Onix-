@@ -1,8 +1,13 @@
 #include <stdio.h>
-char message[] = "hello  onix!";
-char buf[1024];
+#include "test.h"
+
+// char message[] = "hello  onix!";
+// char buf[1024];
 int main()
 {
-    printf(message);
+    int *p;
+    test();
+    // p = &a;
+    // printf("%d", *p);
     return 0;
 }

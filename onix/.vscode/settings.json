@@ -1,18 +1,23 @@
 {
-    "files.associations": {
-        "io.h": "c",
-        "array": "c",
-        "string": "c",
-        "string_view": "c",
-        "span": "c",
-        "types.h": "c",
-        "string.h": "c",
-        "cstring": "c",
-        "console.h": "c",
-        "onix.h": "c",
-        "stdarg.h": "c",
-        "printk.h": "c",
-        "*.inc": "c",
-        "cassert": "c"
-    }
+  "files.associations": {
+    "io.h": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "span": "c",
+    "types.h": "c",
+    "string.h": "c",
+    "cstring": "c",
+    "console.h": "c",
+    "onix.h": "c",
+    "stdarg.h": "c",
+    "printk.h": "c",
+    "*.inc": "c",
+    "cassert": "c",
+    "cmath": "cpp",
+    "stdio.h": "c",
+    "assert.h": "c",
+    "task.h": "c",
+    "test.h": "c"
+  }
 }
